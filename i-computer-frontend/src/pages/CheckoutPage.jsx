@@ -76,7 +76,45 @@ export default function CheckoutPage() {
         throw new Error("Unauthorized. Please log in again.");
       }
 
+      const sanitizedItems = cartItems
+        .map((item) => {
+          const quantity = Number(item.quantity) || 1;
+          const price = Number(item.price) || 0;
+
+          return {
+            productId: item.productId || item._id || item.id || null,
+            name: item.name || "Unnamed product",
+            price,
+            quantity,
+            image: item.image || item.images?.[0] || "",
+            brand: item.brand || "",
+            category: item.category || "",
+          };
+        })
+        .filter((item) => item.quantity > 0);
+
+      if (!sanitizedItems.length) {
+        throw new Error("No valid items found in cart.");
+      }
+
+      const tax = total * 0.1;
+      const shipping = 0;
+      const finalTotal = total + tax + shipping;
+      const orderId = `ORD-${Date.now()}-${Math.floor(Math.random() * 10000)}`;
+
       const orderPayload = {
+        orderId,
+        // Flat fields for backward compatibility with older backend validators
+        name: `${formData.firstName} ${formData.lastName}`.trim(),
+        email: formData.email,
+        phone: formData.phone,
+        address: formData.address,
+        city: formData.city,
+        state: formData.state,
+        zipCode: formData.zipCode,
+        country: formData.country,
+        date: new Date().toISOString(),
+        status: "pending",
         customer: {
           firstName: formData.firstName,
           lastName: formData.lastName,
@@ -90,28 +128,54 @@ export default function CheckoutPage() {
           zipCode: formData.zipCode,
           country: formData.country,
         },
-        items: cartItems,
+        items: sanitizedItems,
         subtotal: total,
-        tax: total * 0.1,
-        shipping: 0,
-        total: total * 1.1,
+        tax,
+        shipping,
+        total: finalTotal,
       };
 
       const response = await axios.post(`${backendUrl}/orders`, orderPayload, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
+        timeout: 15000,
       });
 
       toast.success(response.data?.message || "Order placed successfully!");
       emptyCart();
+      try {
+        const emailKey = String(formData.email || "").toLowerCase().trim();
+        if (emailKey) {
+          const stored = localStorage.getItem("orderCounts");
+          const counts = stored ? JSON.parse(stored) : {};
+          const current = Number(counts[emailKey]) || 0;
+          counts[emailKey] = current + 1;
+          localStorage.setItem("orderCounts", JSON.stringify(counts));
+        }
+      } catch {
+        // ignore localStorage errors
+      }
       navigate("/");
     } catch (error) {
-      const message =
+      const backendMessage =
         error?.response?.data?.message ||
-        error.message ||
-        "Failed to place order. Please try again.";
-      toast.error(message);
+        error?.response?.data?.error ||
+        "";
+
+      const isDuplicateKey = /E11000|duplicate key/i.test(String(backendMessage));
+
+      if (isDuplicateKey) {
+        const fieldMatch = String(backendMessage).match(/index:\s*([a-zA-Z0-9_]+)_/);
+        const field = fieldMatch?.[1] || "a unique field";
+        toast.error(`Order failed: duplicate value for ${field}. Backend must allow multiple orders per user.`);
+      } else {
+        const message =
+          backendMessage ||
+          error.message ||
+          "Failed to place order. Please try again.";
+        toast.error(message);
+      }
     } finally {
       setLoading(false);
     }

@@ -1,4 +1,5 @@
-import { NavLink, Route, Routes } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { NavLink, Route, Routes, useNavigate } from "react-router-dom";
 import { FaClipboardList } from "react-icons/fa";
 import { AiFillProduct } from "react-icons/ai";
 import { FaUser } from "react-icons/fa";
@@ -10,6 +11,40 @@ import EditProductPage from "./admin/editProductPage";
 import AdminOrdersPage from "./admin/adminOrdersPage";
 
 export default function AdminPage() {
+  const navigate = useNavigate();
+  const [isAuthorized, setIsAuthorized] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token") || localStorage.getItem(" token");
+
+    if (!token) {
+      navigate("/login", { replace: true });
+      return;
+    }
+
+    let role = (localStorage.getItem("role") || "").toLowerCase();
+
+    if (!role) {
+      try {
+        const payload = JSON.parse(atob(token.split(".")[1] || ""));
+        role = String(payload?.role || payload?.user?.role || "").toLowerCase();
+      } catch {
+        role = "";
+      }
+    }
+
+    if (role && role !== "admin") {
+      navigate("/", { replace: true });
+      return;
+    }
+
+    setIsAuthorized(true);
+  }, [navigate]);
+
+  if (!isAuthorized) {
+    return null;
+  }
+
   const navItemBase =
     "flex h-11 min-w-max items-center gap-2.5 rounded-xl px-4 text-sm font-medium transition lg:h-12 lg:w-full";
 

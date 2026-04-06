@@ -36,7 +36,7 @@ export default function SiteFooter() {
           </div>
         </div>
       </div>
-      <div className="border-t border-white/10 py-4 text-center text-xs text-muted">© {new Date().getFullYear()} I-COMPUTER. All rights reserved.</div>
+      <div className="border-t border-white/10 py-4 text-center text-xs text-muted">© {new Date().getFullYear()} ApexTech. All rights reserved.</div>
     </footer>
   );
 }

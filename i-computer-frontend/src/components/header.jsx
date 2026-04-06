@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FaSuitcase } from "react-icons/fa6";
+import { FaRegUserCircle } from "react-icons/fa";
 import { getCart } from "../utils/cart";
 
 export default function Header() {
@@ -24,7 +25,6 @@ export default function Header() {
     { to: "/", label: "Home" },
     { to: "/products", label: "Products" },
     { to: "/about", label: "About" },
-    { to: "/profile", label: "Profile" },
     { to: "/contact", label: "Contact" },
   ];
 
@@ -48,11 +48,11 @@ export default function Header() {
           </button>
           <Link to="/" className="flex items-center gap-2">
             <img
-              src="/logo.png"
-              alt="Logo"
+              src="/logo.jpg"
+              alt="ApexTech logo"
               className="h-10 w-auto rounded-lg object-contain sm:h-11"
             />
-            <span className="font-heading hidden text-sm text-text sm:inline">I-COMPUTER</span>
+            <span className="font-heading hidden text-sm text-text sm:inline">ApexTech</span>
           </Link>
         </div>
 
@@ -71,19 +71,27 @@ export default function Header() {
         <div className="flex items-center gap-2">
           <Link
             to="/login"
-            className="hidden rounded-lg border border-white/10 bg-secondary px-3 py-2 text-xs font-medium text-text transition duration-200 hover:bg-hover sm:inline-flex"
+            className="hidden rounded-lg border border-white/15 bg-secondary px-3 py-2 text-xs font-semibold text-text transition duration-200 hover:bg-hover sm:inline-flex"
           >
-            Login
+            Sign In
           </Link>
           <Link
             to="/register"
-            className="hidden rounded-lg bg-accent-2 px-3 py-2 text-xs font-medium text-text transition duration-200 hover:brightness-110 sm:inline-flex"
+            className="hidden rounded-lg bg-accent-2 px-3 py-2 text-xs font-semibold text-text shadow-lg shadow-cyan-900/25 transition duration-200 hover:brightness-110 sm:inline-flex"
           >
             Sign Up
           </Link>
+          <div className="hidden h-7 w-px bg-white/20 md:block" aria-hidden="true" />
+          <Link
+            to="/profile"
+            className="hidden items-center gap-2 rounded-lg border border-white/15 bg-secondary px-3 py-2 text-xs font-semibold text-text transition duration-200 hover:bg-hover md:inline-flex"
+          >
+            <FaRegUserCircle className="text-base" />
+            Profile
+          </Link>
         <Link
           to="/cart"
-          className="relative flex h-10 w-10 items-center justify-center rounded-lg border border-white/10 bg-secondary text-text transition duration-200 hover:bg-hover sm:h-11 sm:w-11"
+          className="relative flex h-10 w-10 items-center justify-center rounded-lg border border-white/15 bg-secondary text-text transition duration-200 hover:bg-hover sm:h-11 sm:w-11"
           aria-label="Open cart"
         >
           <FaSuitcase className="text-lg" />
@@ -128,11 +136,19 @@ export default function Header() {
                   {link.label}
                 </Link>
               ))}
+              <Link
+                to="/profile"
+                onClick={() => setMenuOpen(false)}
+                className="mt-2 flex items-center gap-2 rounded-lg border border-white/10 bg-secondary px-3 py-2 text-text"
+              >
+                <FaRegUserCircle className="text-base" />
+                Profile
+              </Link>
               <div className="mt-4 flex gap-2">
-                <Link to="/login" onClick={() => setMenuOpen(false)} className="flex-1 rounded-lg border border-white/10 bg-secondary px-3 py-2 text-center text-xs font-medium">
-                  Login
+                <Link to="/login" onClick={() => setMenuOpen(false)} className="flex-1 rounded-lg border border-white/10 bg-secondary px-3 py-2 text-center text-xs font-semibold">
+                  Sign In
                 </Link>
-                <Link to="/register" onClick={() => setMenuOpen(false)} className="flex-1 rounded-lg bg-accent-2 px-3 py-2 text-center text-xs font-medium">
+                <Link to="/register" onClick={() => setMenuOpen(false)} className="flex-1 rounded-lg bg-accent-2 px-3 py-2 text-center text-xs font-semibold">
                   Sign Up
                 </Link>
               </div>

@@ -7,6 +7,7 @@ import productRouter from './routes/productRouter.js';
 import orderRouter from './routes/orderRouter.js';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import { continueWithGoogle } from './controllers/userController.js';
 
 dotenv.config();
 
@@ -21,16 +22,45 @@ app.use(cors());
 
 const mongodbURL = process.env.mongoURL;
 
+async function ensureOrderIndexes() {
+    try {
+        const ordersCollection = mongoose.connection.db.collection("orders");
+        const indexes = await ordersCollection.indexes();
+        const legacyUniqueUserIdIndex = indexes.find(
+            (index) => index.name === "userId_1" && index.unique === true
+        );
+
+        if (legacyUniqueUserIdIndex) {
+            await ordersCollection.dropIndex("userId_1");
+            console.log("Dropped legacy unique index on orders.userId");
+        }
+    } catch (error) {
+        console.log("Order index check warning:", error.message);
+    }
+}
+
 
 
 // If the SRV connection above keeps failing, replace it with the standard connection string
 // from your Atlas dashboard: Database → Connect → Drivers → select "Node.js" → copy the string
 
 mongoose.connect(mongodbURL)
-.then(() => {
+.then(async () => {
+    await ensureOrderIndexes();
     console.log("connected to mongodb")
     app.listen(3000, () => {
         console.log("server running on port 3000")
+        // console.log("Available routes:")
+        // console.log("POST /api/users")
+        // console.log("POST /api/users/register")
+        // console.log("POST /api/users/login")
+        // console.log("POST /api/users/google")
+        // console.log("GET  /api/products")
+        // console.log("POST /api/products")
+        // console.log("PUT  /api/products/:productId")
+        // console.log("DELETE /api/products/:productId")
+        // console.log("GET  /api/orders")
+        // console.log("POST /api/orders")
         
 
     })
@@ -72,6 +102,28 @@ app.use(express.json());
 // Use the userRouter for all routes starting with /users
 
 app.use((req, res, next) => {
+    const publicUserPaths = [
+        "/api/users",
+        "/api/users/register",
+        "/api/users/login",
+        "/api/users/google",
+        "/api/users/google-login",
+        "/api/users/googleLogin",
+        "/api/users/continue-with-google",
+        "/users",
+        "/users/register",
+        "/users/login",
+        "/users/google",
+        "/users/google-login",
+        "/users/googleLogin",
+        "/users/continue-with-google",
+        "/api/auth/google",
+        "/api/google"
+    ];
+    if (publicUserPaths.includes(req.path) && req.method === "POST") {
+        return next();
+    }
+
     const authHeader = req.header("Authorization");
 
     if (!authHeader) {
@@ -106,6 +158,9 @@ app.use((req, res, next) => {
 
 
 app.use('/api/users', userRouter);
+app.use('/users', userRouter);
+app.post('/api/auth/google', continueWithGoogle);
+app.post('/api/google', continueWithGoogle);
 app.use('/api/products', productRouter);
 app.use('/api/orders', orderRouter);
 

@@ -55,7 +55,10 @@ export default function AdminOrdersPage() {
 				setOrders(list);
 			} catch (error) {
 				if (axios.isCancel(error)) return;
-				const message = error?.response?.data?.message || "Failed to load orders";
+				const backendMessage = error?.response?.data?.message;
+				const message = backendMessage
+					? `Failed to load orders in admin dashboard: ${backendMessage}`
+					: "Failed to load orders in admin dashboard";
 				toast.error(message);
 			} finally {
 				setLoading(false);

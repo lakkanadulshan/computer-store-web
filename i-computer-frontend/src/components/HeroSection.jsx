@@ -32,12 +32,18 @@ export default function HeroSection() {
           </div>
         </div>
 
-        <div className="fade-in-up relative">
-          <div className="rounded-2xl border border-white/10 bg-primary/60 p-6">
-            <img src="/logo.png" alt="Featured setup" className="mx-auto h-44 w-44 object-contain sm:h-52 sm:w-52" />
-            <p className="mt-4 text-center text-xs font-medium tracking-wide text-muted">
-              PERFORMANCE SERIES 2026
-            </p>
+        <div className="fade-in-up relative flex flex-col items-center">
+          <div className="relative w-full max-w-md rounded-3xl bg-primary/40 p-3 shadow-2xl shadow-black/60 ring-1 ring-white/10">
+            <div className="overflow-hidden rounded-3xl">
+              <img
+                src="/home.png"
+                alt="ApexTech home showcase"
+                className="h-full w-full object-cover"
+              />
+            </div>
+          </div>
+          <div className="mt-4 inline-flex items-center justify-center rounded-full border border-white/20 bg-primary/90 px-6 py-2 text-[11px] font-medium tracking-[0.18em] text-muted/90">
+            PERFORMANCE SERIES 2026
           </div>
         </div>
       </div>

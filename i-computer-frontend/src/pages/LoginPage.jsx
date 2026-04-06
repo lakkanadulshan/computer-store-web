@@ -1,5 +1,7 @@
 import { Link,useNavigate} from "react-router-dom";
 import { useState } from "react";
+import { FcGoogle } from "react-icons/fc";
+import { useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import toast from "react-hot-toast";
 
@@ -7,7 +9,48 @@ import toast from "react-hot-toast";
 export default function LoginPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [googleToken, setGoogleToken] = useState(null);
     const navigate = useNavigate();
+
+
+    const loginWithGoogle = useGoogleLogin({
+        flow: "implicit",
+        onSuccess: async (tokenResponse) => {
+            try {
+                setGoogleToken(tokenResponse);
+
+                const backendUrl = import.meta.env.VITE_backend_URL;
+                const res = await axios.post(`${backendUrl}/users/google-login`, {
+                    access_token: tokenResponse.access_token,
+                });
+
+                localStorage.setItem("token", res.data.token);
+                const userRole = String(res.data.role || "").toLowerCase();
+
+                if (userRole) {
+                    localStorage.setItem("role", userRole);
+                } else {
+                    localStorage.removeItem("role");
+                }
+
+                if (userRole === "admin") {
+                    navigate("/admin");
+                } else {
+                    navigate("/");
+                }
+
+                toast.success("Logged in with Google successfully!");
+            } catch (error) {
+                console.error("Google login backend failed:", error);
+                toast.error("Google login failed on server. Please try again.");
+            }
+        },
+        onError: () => {
+            toast.error("Google login failed. Please try again.");
+        },
+    });
+
+
 
     async function login(e){
         e.preventDefault();
@@ -22,10 +65,16 @@ export default function LoginPage() {
             });
 
             localStorage.setItem("token", res.data.token);
-            const token = res.data.token;
+            const userRole = String(res.data.role || "").toLowerCase();
+
+            if (userRole) {
+                localStorage.setItem("role", userRole);
+            } else {
+                localStorage.removeItem("role");
+            }
 
             console.log("Login successful:", res.data);
-            if(res.data.role === "admin") {
+            if(userRole === "admin") {
                 navigate("/admin");
             }else {
                 navigate("/");
@@ -60,7 +109,7 @@ export default function LoginPage() {
                 <div className="w-full max-w-md rounded-2xl border border-white/10 bg-secondary p-8 shadow-xl">
                     <div className="space-y-2 text-center">
                         <h1 className="font-heading text-3xl text-text">Welcome back</h1>
-                        <p className="text-sm text-muted">Sign in to continue to I-Computer.</p>
+                        <p className="text-sm text-muted">Sign in to continue to ApexTech.</p>
                     </div>
 
                     <form className="mt-8 space-y-6">
@@ -104,11 +153,27 @@ export default function LoginPage() {
                             </button>
                         </div>
 
-                        <button onClick={login}
+                        <button
+                            onClick={login}
                             type="submit"
                             className="w-full rounded-lg bg-accent px-4 py-3 text-primary font-medium shadow-md transition duration-200 hover:brightness-110"
                         >
                             Log in
+                        </button>
+
+                        <div className="relative mt-4 flex items-center justify-center text-xs text-muted">
+                            <span className="h-px w-full bg-white/10" />
+                            <span className="mx-3 whitespace-nowrap">or</span>
+                            <span className="h-px w-full bg-white/10" />
+                        </div>
+
+                        <button
+                            type="button"
+                            onClick={() => loginWithGoogle()}
+                            className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg border border-white/20 bg-primary px-4 py-3 text-sm font-medium text-text shadow-sm transition duration-200 hover:bg-hover"
+                        >
+                            <FcGoogle className="text-lg" />
+                            Continue with Google
                         </button>
                     </form>
 
