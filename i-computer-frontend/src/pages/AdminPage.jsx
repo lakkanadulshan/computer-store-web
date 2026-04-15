@@ -9,10 +9,13 @@ import AdminProducts from "./admin/adminProducts";
 import AddProductPage from "./admin/addProductPage";
 import EditProductPage from "./admin/editProductPage";
 import AdminOrdersPage from "./admin/adminOrdersPage";
+import AdminUsersPage from "./admin/adminUsersPage";
+import AdminReviewsPage from "./admin/adminReviewsPage";
 
 export default function AdminPage() {
   const navigate = useNavigate();
   const [isAuthorized, setIsAuthorized] = useState(false);
+  const [logoSrc, setLogoSrc] = useState("/logo.jpg");
 
   useEffect(() => {
     const token = localStorage.getItem("token") || localStorage.getItem(" token");
@@ -56,7 +59,12 @@ export default function AdminPage() {
     <div className="flex h-full w-full max-h-full flex-col bg-linear-to-br from-slate-950 via-cyan-950 to-slate-900 lg:flex-row">
       <aside className="w-full shrink-0 border-b border-white/10 bg-white/5 backdrop-blur-sm lg:h-full lg:w-72 lg:border-b-0 lg:border-r">
         <div className="flex h-22 w-full items-center gap-3 px-4 lg:h-24">
-          <img src="/logo.png" alt="Logo" className="h-14 w-14 rounded-xl bg-white/10 p-1.5 object-contain" />
+          <img
+            src={logoSrc}
+            onError={() => setLogoSrc("/home.png")}
+            alt="ApexTech logo"
+            className="h-14 w-14 rounded-xl bg-white/10 p-1.5 object-contain"
+          />
           <div>
             <p className="text-xs font-semibold uppercase tracking-wide text-cyan-200">Control Center</p>
             <p className="text-lg font-semibold text-white">Admin Dashboard</p>
@@ -95,8 +103,8 @@ export default function AdminPage() {
           <Route path="products" element={<AdminProducts />} />
           <Route path="products/:productId/edit" element={<EditProductPage />} />
           <Route path="addproduct" element={<AddProductPage />} />
-          <Route path="users" element={<h1>Users</h1>} />
-          <Route path="reviews" element={<h1>Reviews</h1>} />
+          <Route path="users" element={<AdminUsersPage />} />
+          <Route path="reviews" element={<AdminReviewsPage />} />
         </Routes>
         </div>
       </main>

@@ -7,6 +7,7 @@ import CartPage from "./CartPage";
 import CheckoutPage from "./CheckoutPage";
 import SiteFooter from "../components/SiteFooter";
 import ProfilePage from "./ProfilePage";
+import OrdersPage from "./orders";
 
 export default function HomePage() {
   return (
@@ -19,6 +20,7 @@ export default function HomePage() {
           <Route path="products/:productId" element={<ProductOverviewPage />} />
           <Route path="cart" element={<CartPage />} />
           <Route path="checkout" element={<CheckoutPage />} />
+          <Route path="orders" element={<OrdersPage />} />
           <Route path="about" element={<div />} />
           <Route path="profile" element={<ProfilePage />} />
           <Route path="contact" element={<div />} />

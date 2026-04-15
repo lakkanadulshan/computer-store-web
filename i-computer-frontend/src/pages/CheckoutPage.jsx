@@ -156,7 +156,7 @@ export default function CheckoutPage() {
       } catch {
         // ignore localStorage errors
       }
-      navigate("/");
+      navigate("/orders");
     } catch (error) {
       const backendMessage =
         error?.response?.data?.message ||

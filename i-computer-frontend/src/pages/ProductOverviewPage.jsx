@@ -10,6 +10,12 @@ export default function ProductOverviewPage() {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [activeIdx, setActiveIdx] = useState(0);
+  const [activeTab, setActiveTab] = useState("details");
+  const [reviews, setReviews] = useState([]);
+  const [reviewsLoading, setReviewsLoading] = useState(true);
+  const [ratingInput, setRatingInput] = useState(5);
+  const [commentInput, setCommentInput] = useState("");
+  const [savingReview, setSavingReview] = useState(false);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -36,6 +42,29 @@ export default function ProductOverviewPage() {
     return () => controller.abort();
   }, [productId, navigate]);
 
+  useEffect(() => {
+    const controller = new AbortController();
+
+    async function loadReviews() {
+      setReviewsLoading(true);
+      try {
+        const res = await axios.get(`${import.meta.env.VITE_backend_URL}/products/${productId}/reviews`, {
+          signal: controller.signal,
+        });
+        const list = Array.isArray(res.data?.reviews) ? res.data.reviews : [];
+        setReviews(list);
+      } catch (err) {
+        if (axios.isCancel(err)) return;
+        setReviews([]);
+      } finally {
+        setReviewsLoading(false);
+      }
+    }
+
+    loadReviews();
+    return () => controller.abort();
+  }, [productId]);
+
   const images = useMemo(() => {
     const list = product?.images || [];
     if (list.length) return list;
@@ -59,6 +88,48 @@ export default function ProductOverviewPage() {
       image: images[0],
     });
     navigate("/checkout");
+  };
+
+  const handleSubmitReview = async (event) => {
+    event.preventDefault();
+
+    const token = localStorage.getItem("token") || localStorage.getItem(" token");
+    if (!token) {
+      toast.error("Please login to add a review");
+      navigate("/login");
+      return;
+    }
+
+    if (!commentInput.trim()) {
+      toast.error("Please write your review comment");
+      return;
+    }
+
+    setSavingReview(true);
+    try {
+      const res = await axios.post(
+        `${import.meta.env.VITE_backend_URL}/products/${productId}/reviews`,
+        {
+          rating: Number(ratingInput),
+          comment: commentInput.trim(),
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const list = Array.isArray(res.data?.reviews) ? res.data.reviews : [];
+      setReviews(list);
+      setCommentInput("");
+      toast.success(res.data?.message || "Review saved");
+      setActiveTab("reviews");
+    } catch (err) {
+      toast.error(err?.response?.data?.message || "Failed to save review");
+    } finally {
+      setSavingReview(false);
+    }
   };
 
   if (loading) {
@@ -112,33 +183,115 @@ export default function ProductOverviewPage() {
             </div>
           </div>
 
-          {product.description && <p className="leading-relaxed text-muted">{product.description}</p>}
-
-          <div className="flex flex-wrap gap-4 text-sm">
-            {product.model && <span className="rounded-full border border-white/10 bg-hover px-3 py-1 text-muted">Model: {product.model}</span>}
-            {product.category && <span className="rounded-full border border-white/10 bg-hover px-3 py-1 text-muted">Category: {product.category}</span>}
-            {product.stock !== undefined && <span className="rounded-full border border-white/10 bg-hover px-3 py-1 text-muted">Stock: {product.stock}</span>}
-            <span className={`rounded-full px-3 py-1 shadow-sm ${product.isAvailable ? "bg-green-100 text-green-700" : "bg-gray-200 text-gray-700"}`}>
-              {product.isAvailable ? "Available" : "Unavailable"}
-            </span>
-          </div>
-
-          <div className="flex gap-3">
+          <div className="flex gap-2">
             <button
               type="button"
-              onClick={handleAddToCart}
-              className="rounded-lg bg-accent px-4 py-3 text-primary font-medium shadow transition duration-200 hover:brightness-110"
+              onClick={() => setActiveTab("details")}
+              className={`rounded-lg px-4 py-2 text-sm font-medium transition ${
+                activeTab === "details"
+                  ? "bg-accent text-primary"
+                  : "border border-white/15 bg-primary text-text hover:bg-hover"
+              }`}
             >
-              Add to cart
+              Details
             </button>
             <button
               type="button"
-              onClick={handleBuyNow}
-              className="rounded-lg border border-white/15 bg-transparent px-4 py-3 font-medium text-text transition duration-200 hover:bg-hover"
+              onClick={() => setActiveTab("reviews")}
+              className={`rounded-lg px-4 py-2 text-sm font-medium transition ${
+                activeTab === "reviews"
+                  ? "bg-accent text-primary"
+                  : "border border-white/15 bg-primary text-text hover:bg-hover"
+              }`}
             >
-              Buy now
+              Reviews ({reviews.length})
             </button>
           </div>
+
+          {activeTab === "details" && (
+            <>
+              {product.description && <p className="leading-relaxed text-muted">{product.description}</p>}
+
+              <div className="flex flex-wrap gap-4 text-sm">
+                {product.model && <span className="rounded-full border border-white/10 bg-hover px-3 py-1 text-muted">Model: {product.model}</span>}
+                {product.category && <span className="rounded-full border border-white/10 bg-hover px-3 py-1 text-muted">Category: {product.category}</span>}
+                {product.stock !== undefined && <span className="rounded-full border border-white/10 bg-hover px-3 py-1 text-muted">Stock: {product.stock}</span>}
+                <span className={`rounded-full px-3 py-1 shadow-sm ${product.isAvailable ? "bg-green-100 text-green-700" : "bg-gray-200 text-gray-700"}`}>
+                  {product.isAvailable ? "Available" : "Unavailable"}
+                </span>
+              </div>
+
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  onClick={handleAddToCart}
+                  className="rounded-lg bg-accent px-4 py-3 text-primary font-medium shadow transition duration-200 hover:brightness-110"
+                >
+                  Add to cart
+                </button>
+                <button
+                  type="button"
+                  onClick={handleBuyNow}
+                  className="rounded-lg border border-white/15 bg-transparent px-4 py-3 font-medium text-text transition duration-200 hover:bg-hover"
+                >
+                  Buy now
+                </button>
+              </div>
+            </>
+          )}
+
+          {activeTab === "reviews" && (
+            <div className="space-y-4">
+              <form onSubmit={handleSubmitReview} className="rounded-xl border border-white/10 bg-primary p-4">
+                <p className="mb-3 text-sm font-semibold text-text">Add your review</p>
+                <div className="grid gap-3 sm:grid-cols-[120px_1fr]">
+                  <select
+                    value={ratingInput}
+                    onChange={(event) => setRatingInput(event.target.value)}
+                    className="rounded-lg border border-white/15 bg-secondary px-3 py-2 text-sm text-text outline-none focus:border-accent"
+                  >
+                    <option value={5}>5 stars</option>
+                    <option value={4}>4 stars</option>
+                    <option value={3}>3 stars</option>
+                    <option value={2}>2 stars</option>
+                    <option value={1}>1 star</option>
+                  </select>
+                  <input
+                    type="text"
+                    value={commentInput}
+                    onChange={(event) => setCommentInput(event.target.value)}
+                    placeholder="Write your review"
+                    className="rounded-lg border border-white/15 bg-secondary px-3 py-2 text-sm text-text outline-none focus:border-accent"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  disabled={savingReview}
+                  className="mt-3 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-primary transition hover:brightness-110 disabled:opacity-60"
+                >
+                  {savingReview ? "Saving..." : "Submit review"}
+                </button>
+              </form>
+
+              {reviewsLoading ? (
+                <div className="rounded-xl border border-white/10 bg-primary p-4 text-sm text-muted">Loading reviews...</div>
+              ) : reviews.length === 0 ? (
+                <div className="rounded-xl border border-white/10 bg-primary p-4 text-sm text-muted">No reviews yet.</div>
+              ) : (
+                <div className="space-y-3">
+                  {reviews.map((review, idx) => (
+                    <div key={`${review.userEmail || "review"}-${idx}`} className="rounded-xl border border-white/10 bg-primary p-4">
+                      <div className="flex items-center justify-between gap-3">
+                        <p className="text-sm font-semibold text-text">{review.userName || "Customer"}</p>
+                        <p className="text-xs text-accent">{Number(review.rating) || 0}/5</p>
+                      </div>
+                      <p className="mt-2 text-sm text-muted">{review.comment}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>
