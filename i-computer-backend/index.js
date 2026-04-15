@@ -5,6 +5,7 @@ import userRouter from './routes/userRouter.js';
 import jwt from "jsonwebtoken";
 import productRouter from './routes/productRouter.js';
 import orderRouter from './routes/orderRouter.js';
+import contactRouter from './routes/contactRouter.js';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { continueWithGoogle } from './controllers/userController.js';
@@ -163,4 +164,5 @@ app.post('/api/auth/google', continueWithGoogle);
 app.post('/api/google', continueWithGoogle);
 app.use('/api/products', productRouter);
 app.use('/api/orders', orderRouter);
+app.use('/api/contact', contactRouter);
 
