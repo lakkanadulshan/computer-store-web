@@ -8,6 +8,8 @@ import CheckoutPage from "./CheckoutPage";
 import SiteFooter from "../components/SiteFooter";
 import ProfilePage from "./ProfilePage";
 import OrdersPage from "./orders";
+import AboutPage from "./AboutPage";
+import ContactPage from "./ContactPage";
 
 export default function HomePage() {
   return (
@@ -21,9 +23,9 @@ export default function HomePage() {
           <Route path="cart" element={<CartPage />} />
           <Route path="checkout" element={<CheckoutPage />} />
           <Route path="orders" element={<OrdersPage />} />
-          <Route path="about" element={<div />} />
+          <Route path="about" element={<AboutPage />} />
           <Route path="profile" element={<ProfilePage />} />
-          <Route path="contact" element={<div />} />
+          <Route path="contact" element={<ContactPage />} />
           <Route path="/*" element={<h1>404 Not Found</h1>} />
         </Routes>
       </div>
