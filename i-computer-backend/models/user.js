@@ -36,6 +36,30 @@ const userSchema = new mongoose.Schema(
             type: String,
             required: true,
             default :"/default-profile-pic.png"
+        },
+        phone: {
+            type: String,
+            default: ""
+        },
+        address: {
+            type: String,
+            default: ""
+        },
+        city: {
+            type: String,
+            default: ""
+        },
+        state: {
+            type: String,
+            default: ""
+        },
+        zipCode: {
+            type: String,
+            default: ""
+        },
+        country: {
+            type: String,
+            default: ""
         }
     }
 )

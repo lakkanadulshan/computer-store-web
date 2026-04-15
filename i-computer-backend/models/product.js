@@ -57,6 +57,39 @@ const productSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  reviews: {
+    type: [
+      {
+        userEmail: {
+          type: String,
+          required: true,
+        },
+        userName: {
+          type: String,
+          required: true,
+        },
+        rating: {
+          type: Number,
+          required: true,
+          min: 1,
+          max: 5,
+        },
+        comment: {
+          type: String,
+          required: true,
+        },
+        createdAt: {
+          type: Date,
+          default: Date.now,
+        },
+        updatedAt: {
+          type: Date,
+          default: Date.now,
+        },
+      },
+    ],
+    default: [],
+  },
 });
 
 const Product = mongoose.model("Product", productSchema);
