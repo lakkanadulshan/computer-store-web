@@ -15,6 +15,9 @@ export default function LoginPage() {
 
     const loginWithGoogle = useGoogleLogin({
         flow: "implicit",
+        ux_mode: "popup",
+        scope: "openid email profile",
+        prompt: "select_account",
         onSuccess: async (tokenResponse) => {
             try {
                 setGoogleToken(tokenResponse);

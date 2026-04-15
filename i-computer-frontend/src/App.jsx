@@ -9,10 +9,12 @@ import { Toaster } from "react-hot-toast";
 import Test from "./components/test";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
+const googleClientId =
+  import.meta.env.VITE_GOOGLE_CLIENT_ID || import.meta.env.VITE_google_client_id || "";
 
 function App() {
   return (
-    <GoogleOAuthProvider clientId={import.meta.env.VITE_google_client_id}>
+    <GoogleOAuthProvider clientId={googleClientId}>
       <BrowserRouter>
         <Toaster position="top-right" />
         <div className="h-screen w-full bg-linear-to-br from-slate-950 via-cyan-950 to-slate-900 text-secondary">
