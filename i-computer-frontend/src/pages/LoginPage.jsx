@@ -93,28 +93,14 @@ export default function LoginPage() {
 
 
     return (
-        <div className="min-h-screen bg-primary text-text lg:flex">
-            <div className="relative hidden w-full lg:flex lg:w-1/2 h-auto">
-                <img
-                    src="/bg-img.jpg"
-                    alt="Computer shop display"
-                    className="absolute inset-0 h-full w-full object-cover"
-                />
-                <div className="absolute inset-0 bg-linear-to-r from-primary via-primary/70 to-transparent" />
-                <div className="relative h-full w-full flex items-center justify-center lg:justify-start px-8 lg:px-12">
-                    <div className="space-y-4">
-                        <h2 className="text-3xl lg:text-4xl font-bold text-text max-w-md leading-tight">
-                            Welcome to ApexTech
-                        </h2>
-                        <p className="text-lg text-muted max-w-md">
-                            Your perfect match for every computer build and upgrade.
-                        </p>
-                    </div>
+        <div className="min-h-screen w-full bg-linear-to-br from-primary via-primary to-secondary/20 text-text flex items-center justify-center p-4">
+            <div className="w-full max-w-md">
+                <div className="mb-8 text-center">
+                    <h1 className="font-heading text-4xl font-bold text-text mb-2">ApexTech</h1>
+                    <p className="text-muted text-sm">Your perfect match for every computer build</p>
                 </div>
-            </div>
 
-            <div className="flex w-full flex-col items-center justify-center p-6 lg:p-12 lg:w-1/2 min-h-screen lg:min-h-auto">
-                <div className="w-full max-w-md rounded-2xl border border-white/10 bg-secondary/50 p-8 shadow-lg backdrop-blur-sm">
+                <div className="w-full rounded-2xl border border-white/10 bg-secondary/40 p-8 shadow-xl backdrop-blur-md">
                     <div className="space-y-2">
                         <h1 className="font-heading text-3xl font-bold text-text">Sign in</h1>
                         <p className="text-sm text-muted">Continue to your ApexTech account</p>
