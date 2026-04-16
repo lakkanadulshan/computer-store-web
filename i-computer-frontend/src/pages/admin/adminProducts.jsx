@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import ProductDeleteButton from "../../components/productDeleteButton";
+import { formatLkr } from "../../utils/currency";
 
 export default function AdminProducts() {
   const [products, setProducts] = useState([]);
@@ -143,12 +144,10 @@ export default function AdminProducts() {
                       <td className="px-4 py-3 text-sm text-gray-700">
                         <div className="flex flex-col">
                           <span>
-                            {typeof product.price === "number" ? product.price.toFixed(2) : product.price || "-"}
+                            {formatLkr(product.price)}
                           </span>
                           <span className="text-xs text-gray-500">
-                            {typeof product.labelPrice === "number"
-                              ? product.labelPrice.toFixed(2)
-                              : product.labelPrice || "-"}
+                            {formatLkr(product.labelPrice)}
                           </span>
                         </div>
                       </td>

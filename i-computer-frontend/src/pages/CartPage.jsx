@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { emptyCart, getCart, updateCartQuantity } from "../utils/cart";
+import { formatLkr } from "../utils/currency";
 
 export default function CartPage() {
   const navigate = useNavigate();
@@ -127,7 +128,7 @@ export default function CartPage() {
                           </button>
                         </div>
                         <p className="text-sm text-muted">Qty</p>
-                        <p className="text-lg font-semibold">${Number(item.price || 0).toFixed(2)}</p>
+                        <p className="text-lg font-semibold">{formatLkr(item.price)}</p>
                       </div>
                     </div>
                   </div>
@@ -144,7 +145,7 @@ export default function CartPage() {
                 </div>
                 <div className="flex items-center justify-between border-t border-white/10 pt-3 text-base font-semibold text-text">
                   <span>Total</span>
-                  <span>${total.toFixed(2)}</span>
+                  <span>{formatLkr(total)}</span>
                 </div>
               </div>
 

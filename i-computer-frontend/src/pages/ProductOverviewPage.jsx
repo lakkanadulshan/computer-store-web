@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { addToCart } from "../utils/cart";
+import { formatLkr } from "../utils/currency";
 
 export default function ProductOverviewPage() {
   const { productId } = useParams();
@@ -176,9 +177,9 @@ export default function ProductOverviewPage() {
               {product.brand && <p className="text-sm text-muted">{product.brand}</p>}
             </div>
             <div className="text-right">
-              <p className="text-2xl font-bold text-accent">${product.price}</p>
+              <p className="text-2xl font-bold text-accent">{formatLkr(product.price)}</p>
               {product.labelPrice && (
-                <p className="text-sm text-muted line-through">${product.labelPrice}</p>
+                <p className="text-sm text-muted line-through">{formatLkr(product.labelPrice)}</p>
               )}
             </div>
           </div>

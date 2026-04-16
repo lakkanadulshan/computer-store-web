@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { formatLkr } from "../utils/currency";
 
 export function ProductCard({ id, name, price, images = [], category, isAvailable = true }) {
     const fallback = "https://via.placeholder.com/300x200?text=No+Image";
@@ -42,7 +43,7 @@ export function ProductCard({ id, name, price, images = [], category, isAvailabl
             </div>
             <div className="flex flex-col gap-1">
                 <h3 className="font-heading line-clamp-2 text-xl text-text">{name}</h3>
-                <p className="text-base font-bold text-accent">${price}</p>
+                <p className="text-base font-bold text-accent">{formatLkr(price)}</p>
             </div>
             <div className="mt-1 text-xs font-medium">
                 <span className={`rounded-full px-2 py-1 ${isAvailable ? "bg-emerald-500/20 text-emerald-300" : "bg-rose-500/20 text-rose-300"}`}>

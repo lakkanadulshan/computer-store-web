@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { getCart, emptyCart } from "../utils/cart";
+import { formatLkr } from "../utils/currency";
 
 export default function CheckoutPage() {
   const navigate = useNavigate();
@@ -314,7 +315,7 @@ export default function CheckoutPage() {
                       <p className="font-medium">{item.name}</p>
                       <p className="text-xs text-muted">Qty: {quantity}</p>
                     </div>
-                    <p className="font-semibold">${itemTotal.toFixed(2)}</p>
+                    <p className="font-semibold">{formatLkr(itemTotal)}</p>
                   </div>
                 );
               })}
@@ -323,7 +324,7 @@ export default function CheckoutPage() {
             <div className="mt-4 space-y-2 border-t border-white/10 pt-4 text-sm">
               <div className="flex justify-between">
                 <span className="text-muted">Subtotal</span>
-                <span>${total.toFixed(2)}</span>
+                <span>{formatLkr(total)}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-muted">Shipping</span>
@@ -331,11 +332,11 @@ export default function CheckoutPage() {
               </div>
               <div className="flex justify-between">
                 <span className="text-muted">Tax</span>
-                <span>${(total * 0.1).toFixed(2)}</span>
+                <span>{formatLkr(total * 0.1)}</span>
               </div>
               <div className="flex justify-between border-t border-white/10 pt-2 text-base font-semibold">
                 <span>Total</span>
-                <span>${(total * 1.1).toFixed(2)}</span>
+                <span>{formatLkr(total * 1.1)}</span>
               </div>
             </div>
 
