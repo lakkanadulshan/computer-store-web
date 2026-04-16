@@ -94,31 +94,36 @@ export default function LoginPage() {
 
     return (
         <div className="min-h-screen bg-primary text-text lg:flex">
-            <div className="relative w-full lg:w-1/2 h-64 lg:h-auto">
+            <div className="relative hidden w-full lg:flex lg:w-1/2 h-auto">
                 <img
                     src="/bg-img.jpg"
                     alt="Computer shop display"
                     className="absolute inset-0 h-full w-full object-cover"
                 />
-                <div className="absolute inset-0 bg-linear-to-r from-secondary/70 via-secondary/50 to-transparent" />
+                <div className="absolute inset-0 bg-linear-to-r from-primary via-primary/70 to-transparent" />
                 <div className="relative h-full w-full flex items-center justify-center lg:justify-start px-8 lg:px-12">
-                    <p className="text-2xl lg:text-3xl font-semibold text-text max-w-md">
-                        Your perfect match for every computer build and upgrade.
-                    </p>
+                    <div className="space-y-4">
+                        <h2 className="text-3xl lg:text-4xl font-bold text-text max-w-md leading-tight">
+                            Welcome to ApexTech
+                        </h2>
+                        <p className="text-lg text-muted max-w-md">
+                            Your perfect match for every computer build and upgrade.
+                        </p>
+                    </div>
                 </div>
             </div>
 
-            <div className="flex flex-1 items-center justify-center p-6 lg:p-12">
-                <div className="w-full max-w-md rounded-2xl border border-white/10 bg-secondary p-8 shadow-xl">
-                    <div className="space-y-2 text-center">
-                        <h1 className="font-heading text-3xl text-text">Welcome back</h1>
-                        <p className="text-sm text-muted">Sign in to continue to ApexTech.</p>
+            <div className="flex w-full flex-col items-center justify-center p-6 lg:p-12 lg:w-1/2 min-h-screen lg:min-h-auto">
+                <div className="w-full max-w-md rounded-2xl border border-white/10 bg-secondary/50 p-8 shadow-lg backdrop-blur-sm">
+                    <div className="space-y-2">
+                        <h1 className="font-heading text-3xl font-bold text-text">Sign in</h1>
+                        <p className="text-sm text-muted">Continue to your ApexTech account</p>
                     </div>
 
-                    <form className="mt-8 space-y-6">
+                    <form className="mt-8 space-y-5">
                         <div className="space-y-2">
-                            <label htmlFor="email" className="block text-sm font-medium">
-                                Email
+                            <label htmlFor="email" className="block text-sm font-semibold text-text">
+                                Email Address
                             </label>
                             <input onChange={(event)=>{
                                 setEmail(event.target.value);
@@ -126,15 +131,20 @@ export default function LoginPage() {
                             }}
                                 id="email"
                                 type="email"
-                                placeholder="you@example.com"
-                                className="w-full rounded-lg border border-white/15 bg-primary px-4 py-3 text-text shadow-sm focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/40"
+                                placeholder="your@email.com"
+                                className="w-full rounded-lg border border-white/20 bg-primary/50 px-4 py-3 text-text placeholder-muted/60 shadow-sm transition focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/40"
                             />
                         </div>
 
                         <div className="space-y-2">
-                            <label htmlFor="password" className="block text-sm font-medium">
-                                Password
-                            </label>
+                            <div className="flex items-center justify-between">
+                                <label htmlFor="password" className="block text-sm font-semibold text-text">
+                                    Password
+                                </label>
+                                <Link to="/forgot-password" className="text-xs text-accent font-medium hover:underline">
+                                    Forgot?
+                                </Link>
+                            </div>
                             
                             <input onChange={(event)=>{
                                 setPassword(event.target.value);
@@ -142,46 +152,41 @@ export default function LoginPage() {
                                 id="password"
                                 type="password"
                                 placeholder="••••••••"
-                                className="w-full rounded-lg border border-white/15 bg-primary px-4 py-3 text-text shadow-sm focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/40"
+                                className="w-full rounded-lg border border-white/20 bg-primary/50 px-4 py-3 text-text placeholder-muted/60 shadow-sm transition focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/40"
                             />
                         </div>
 
-                        <div className="flex items-center justify-between text-sm">
-                            <label className="inline-flex items-center gap-2">
-                                <input type="checkbox" className="rounded border-secondary/30 text-accent focus:ring-accent" />
-                                <span>Remember me</span>
-                            </label>
-                            <Link to="/forgot-password" className="text-accent font-medium hover:underline">
-                                Forgot password?
-                            </Link>
-                        </div>
+                        <label className="inline-flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" className="w-4 h-4 rounded border-white/20 text-accent focus:ring-accent accent-accent" />
+                            <span className="text-sm text-muted">Keep me signed in</span>
+                        </label>
 
                         <button
                             onClick={login}
                             type="submit"
-                            className="w-full rounded-lg bg-accent px-4 py-3 text-primary font-medium shadow-md transition duration-200 hover:brightness-110"
+                            className="w-full rounded-lg bg-accent px-4 py-3 text-primary font-semibold shadow-lg transition duration-200 hover:brightness-110 active:scale-[0.98]"
                         >
-                            Log in
+                            Sign in
                         </button>
 
-                        <div className="relative mt-4 flex items-center justify-center text-xs text-muted">
+                        <div className="relative flex items-center justify-center text-xs text-muted py-2">
                             <span className="h-px w-full bg-white/10" />
-                            <span className="mx-3 whitespace-nowrap">or</span>
+                            <span className="mx-3 whitespace-nowrap">or continue with</span>
                             <span className="h-px w-full bg-white/10" />
                         </div>
 
                         <button
                             type="button"
                             onClick={() => loginWithGoogle()}
-                            className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg border border-white/20 bg-primary px-4 py-3 text-sm font-medium text-text shadow-sm transition duration-200 hover:bg-hover"
+                            className="w-full flex items-center justify-center gap-2 rounded-lg border border-white/20 bg-primary/30 px-4 py-3 text-sm font-medium text-text shadow-sm transition duration-200 hover:bg-primary/50 hover:border-white/30"
                         >
-                            <FcGoogle className="text-lg" />
-                            Continue with Google
+                            <FcGoogle className="text-xl" />
+                            Google
                         </button>
                     </form>
 
-                    <p className="mt-6 text-sm text-center text-muted">
-                        Don't have an account? <Link to="/register" className="text-accent font-semibold hover:underline">Sign up</Link>
+                    <p className="mt-8 text-sm text-center text-muted">
+                        New to ApexTech? <Link to="/register" className="text-accent font-semibold hover:underline">Create account</Link>
                     </p>
                 </div>
             </div>
