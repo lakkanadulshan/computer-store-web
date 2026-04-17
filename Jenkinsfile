@@ -114,6 +114,24 @@ pipeline {
                 bat "docker push %IMAGE_NAME%:%IMAGE_TAG%"
             }
         }
+
+        stage('Deploy Backend Container') {
+            steps {
+                withCredentials([
+                    string(credentialsId: 'mongo-uri', variable: 'MONGO_URI'),
+                    string(credentialsId: 'jwt-secret', variable: 'JWT_SECRET')
+                ]) {
+                    bat '''
+                    docker stop mern-backend || exit /b 0
+                    docker rm mern-backend || exit /b 0
+                    docker run -d --name mern-backend -p 5000:3000 ^
+                      -e mongoURL="%MONGO_URI%" ^
+                      -e JWT_SECRET="%JWT_SECRET%" ^
+                      %IMAGE_NAME%:%IMAGE_TAG%
+                    '''
+                }
+            }
+        }
     }
 
     post {
