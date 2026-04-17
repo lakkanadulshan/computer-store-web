@@ -9,7 +9,6 @@ import toast from "react-hot-toast";
 export default function LoginPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [googleToken, setGoogleToken] = useState(null);
     const navigate = useNavigate();
 
 
@@ -20,8 +19,6 @@ export default function LoginPage() {
         prompt: "select_account",
         onSuccess: async (tokenResponse) => {
             try {
-                setGoogleToken(tokenResponse);
-
                 const backendUrl = import.meta.env.VITE_backend_URL;
                 const res = await axios.post(`${backendUrl}/users/google-login`, {
                     access_token: tokenResponse.access_token,

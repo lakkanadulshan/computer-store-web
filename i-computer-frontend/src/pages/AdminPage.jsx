@@ -41,7 +41,9 @@ export default function AdminPage() {
       return;
     }
 
-    setIsAuthorized(true);
+    if (role === "admin") {
+      setIsAuthorized(true);
+    }
   }, [navigate]);
 
   if (!isAuthorized) {

@@ -84,7 +84,7 @@ export default function AdminUsersPage() {
     setUpdatingEmail(user.email);
 
     try {
-      const nextBlockedState = !Boolean(user.isBlocked);
+      const nextBlockedState = !user.isBlocked;
       const res = await axios.patch(
         `${import.meta.env.VITE_backend_URL}/users/${encodeURIComponent(user.email)}/block`,
         { isBlocked: nextBlockedState },

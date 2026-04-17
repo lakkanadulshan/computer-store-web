@@ -97,7 +97,7 @@ export default function ProductsPage() {
                   name={product.name || "Unnamed"}
                   price={typeof product.price === "number" ? product.price.toFixed(2) : product.price || "-"}
                   category={product.category || "Component"}
-                  isAvailable={Boolean(product.isAvailable)}
+                  isAvailable={!!product.isAvailable}
                 />
               </div>
             ))}

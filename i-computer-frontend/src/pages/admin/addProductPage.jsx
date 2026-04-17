@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 import { uploadFile } from "../../utils/mediaUpload";
 
 export default function AddProductPage() {
-  const [files, setFiles] = useState([]);
   const [productId, setProductId] = useState("");
   const [name, setName] = useState("");
   const [altName, setAltName] = useState("");

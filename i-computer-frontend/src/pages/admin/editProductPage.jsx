@@ -41,7 +41,7 @@ export default function EditProductPage() {
       model: data.model || "",
       brand: data.brand || "",
       stock: data.stock ?? "0",
-      isAvailable: Boolean(data.isAvailable),
+      isAvailable: !!data.isAvailable,
     });
     setExistingImages(data.images || []);
   };
