@@ -157,7 +157,7 @@ export default function LoginPage() {
 
                         <div className="relative flex items-center justify-center text-xs text-muted py-2">
                             <span className="h-px w-full bg-white/10" />
-                            <span className="mx-3 whitespace-nowrap">or continue with</span>
+                            <span className="mx-3 whitespace-nowrap">or sign in with</span>
                             <span className="h-px w-full bg-white/10" />
                         </div>
 
