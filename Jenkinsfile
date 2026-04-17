@@ -2,13 +2,6 @@ pipeline {
     agent any
 
     stages {
-
-        stage('SCM Checkout') {
-            steps {
-                git branch: 'main', url: 'https://github.com/lakkanadulshan/computer-store-web.git'
-            }
-        }
-
         stage('Build Docker Image') {
             steps {
                 dir('i-computer-backend') {
