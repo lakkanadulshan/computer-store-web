@@ -80,7 +80,7 @@ export default function RegisterPage() {
         <div className="w-full max-w-md rounded-2xl border border-white/10 bg-secondary p-8 shadow-xl">
           <div className="space-y-2 text-center">
             <h1 className="font-heading text-3xl text-text">Create account</h1>
-            <p className="text-sm text-muted">Sign up to start shopping on I-Computer.</p>
+            <p className="text-sm text-muted">Sign up to start shopping with I-Computer.</p>
           </div>
 
           <form className="mt-8 space-y-5" onSubmit={register}>
