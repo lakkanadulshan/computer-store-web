@@ -71,7 +71,7 @@ export default function AboutPage() {
                 to="/contact"
                 className="inline-flex rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-primary transition hover:brightness-110"
               >
-                Talk to our team
+                Contact our experts
               </Link>
             </div>
           </div>
