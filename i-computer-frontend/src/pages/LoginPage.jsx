@@ -97,7 +97,7 @@ export default function LoginPage() {
             <div className="w-full max-w-md">
                 <div className="mb-8 text-center">
                     <h1 className="font-heading text-4xl font-bold text-text mb-2">ApexTech</h1>
-                    <p className="text-muted text-sm">Your perfect match for every computer build</p>
+                    <p className="text-muted text-sm">Your perfect match for every PC build</p>
                 </div>
 
                 <div className="w-full rounded-2xl border border-white/10 bg-secondary/40 p-8 shadow-xl backdrop-blur-md">
