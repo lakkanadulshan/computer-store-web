@@ -62,7 +62,7 @@ export default function AboutPage() {
           </div>
 
           <div className="fade-in-up rounded-2xl border border-white/10 bg-linear-to-r from-secondary to-slate-900/80 p-6 sm:p-7">
-            <h2 className="font-heading text-2xl">Let us help with your next setup.</h2>
+            <h2 className="font-heading text-2xl">Let us help with your next setup!</h2>
             <p className="mt-2 max-w-2xl text-sm text-muted sm:text-base">
               Need guidance on laptops, gaming rigs, workstation builds, or accessories? Our team can help you pick the right performance profile for your budget.
             </p>
