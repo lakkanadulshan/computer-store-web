@@ -122,8 +122,8 @@ pipeline {
                     string(credentialsId: 'jwt-secret', variable: 'JWT_SECRET')
                 ]) {
                     bat '''
-                    docker stop mern-backend || exit /b 0
-                    docker rm mern-backend || exit /b 0
+                    docker stop mern-backend || echo "No container to stop"
+                    docker rm mern-backend || echo "No container to remove"
                     docker run -d --name mern-backend -p 5000:3000 ^
                       -e mongoURL="%MONGO_URI%" ^
                       -e JWT_SECRET="%JWT_SECRET%" ^

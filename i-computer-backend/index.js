@@ -100,8 +100,6 @@ app.use(express.json());
 //   });
 // });
 
-// Use the userRouter for all routes starting with /users
-
 app.use((req, res, next) => {
     const publicUserPaths = [
         "/api/users",
@@ -165,4 +163,6 @@ app.post('/api/google', continueWithGoogle);
 app.use('/api/products', productRouter);
 app.use('/api/orders', orderRouter);
 app.use('/api/contact', contactRouter);
+
+// testing comment
 
