@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: |
+            i-computer-backend/package-lock.json
+            i-computer-frontend/package-lock.json
+
+      # Backend
+      - name: Install backend dependencies
+        working-directory: ./i-computer-backend
+        run: npm ci
+
+      - name: Lint backend
+        working-directory: ./i-computer-backend
+        run: npm run lint
+
+      - name: Test backend
+        working-directory: ./i-computer-backend
+        run: npm test
+
+      # Frontend
+      - name: Install frontend dependencies
+        working-directory: ./i-computer-frontend
+        run: npm ci
+
+      - name: Lint frontend
+        working-directory: ./i-computer-frontend
+        run: npm run lint
+
+      - name: Test frontend
+        working-directory: ./i-computer-frontend
+        run: npm test
