@@ -21,7 +21,8 @@ const app = express();
 
 app.use(cors());
 
-const mongodbURL = process.env.mongoURL;
+const mongodbURL = process.env.MONGO_URI || process.env.mongoURL;
+const port = process.env.PORT || 3000;
 
 async function ensureOrderIndexes() {
     try {
@@ -49,8 +50,8 @@ mongoose.connect(mongodbURL)
 .then(async () => {
     await ensureOrderIndexes();
     console.log("connected to mongodb")
-    app.listen(3000, () => {
-        console.log("server running on port 3000")
+    app.listen(port, () => {
+        console.log(`server running on port ${port}`)
         // console.log("Available routes:")
         // console.log("POST /api/users")
         // console.log("POST /api/users/register")
