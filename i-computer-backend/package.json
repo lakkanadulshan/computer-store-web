@@ -12,7 +12,9 @@
 
     "start": "node index.js",
 
-    "test": "jest --runInBand"
+    "test": "jest --runInBand",
+
+    "lint": "eslint ."
 
   },
 
@@ -47,6 +49,8 @@
   },
 
   "devDependencies": {
+
+    "eslint": "^9.39.4",
 
     "jest": "^30.3.0"
 
