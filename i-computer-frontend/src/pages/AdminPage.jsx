@@ -14,37 +14,33 @@ import AdminReviewsPage from "./admin/adminReviewsPage";
 
 export default function AdminPage() {
   const navigate = useNavigate();
-  const [isAuthorized, setIsAuthorized] = useState(false);
   const [logoSrc, setLogoSrc] = useState("/logo.jpg");
 
-  useEffect(() => {
-    const token = localStorage.getItem("token") || localStorage.getItem(" token");
+  let role = (localStorage.getItem("role") || "").toLowerCase();
+  const token = localStorage.getItem("token") || localStorage.getItem(" token");
 
+  if (!role && token) {
+    try {
+      const payload = JSON.parse(atob(token.split(".")[1] || ""));
+      role = String(payload?.role || payload?.user?.role || "").toLowerCase();
+    } catch {
+      role = "";
+    }
+  }
+
+  const isAuthorized = role === "admin";
+
+  useEffect(() => {
     if (!token) {
       navigate("/login", { replace: true });
       return;
     }
 
-    let role = (localStorage.getItem("role") || "").toLowerCase();
-
-    if (!role) {
-      try {
-        const payload = JSON.parse(atob(token.split(".")[1] || ""));
-        role = String(payload?.role || payload?.user?.role || "").toLowerCase();
-      } catch {
-        role = "";
-      }
-    }
-
-    if (role && role !== "admin") {
+    if (!isAuthorized) {
       navigate("/", { replace: true });
       return;
     }
-
-    if (role === "admin") {
-      setIsAuthorized(true);
-    }
-  }, [navigate]);
+  }, [navigate, token, isAuthorized]);
 
   if (!isAuthorized) {
     return null;
