@@ -144,7 +144,7 @@ export default function LoginPage() {
 
                         <label className="inline-flex items-center gap-2 cursor-pointer">
                             <input type="checkbox" className="w-4 h-4 rounded border-white/20 text-accent focus:ring-accent accent-accent" />
-                            <span className="text-sm text-muted">Keep me signed in</span>
+                            <span className="text-sm text-muted">Stay signed in</span>
                         </label>
 
                         <button
