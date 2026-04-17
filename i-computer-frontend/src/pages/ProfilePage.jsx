@@ -316,7 +316,7 @@ export default function ProfilePage() {
 
           <div className="rounded-2xl border border-white/10 bg-secondary p-5 shadow-sm">
             <h3 className="font-heading text-xl text-text">Edit Profile</h3>
-            <p className="mt-2 text-sm text-muted">Update your account details here.</p>
+            <p className="mt-2 text-sm text-muted">Update your account details here anytime.</p>
 
             <form className="mt-4 grid gap-4 sm:grid-cols-2" onSubmit={saveProfile}>
               <div>
