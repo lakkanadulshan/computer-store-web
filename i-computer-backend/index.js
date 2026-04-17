@@ -164,5 +164,3 @@ app.use('/api/products', productRouter);
 app.use('/api/orders', orderRouter);
 app.use('/api/contact', contactRouter);
 
-// testing comment
-
