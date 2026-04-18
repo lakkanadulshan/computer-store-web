@@ -1,44 +1,9 @@
-// pipeline {
-//     agent any
-
-//     stages {
-//         stage('Build Docker Image') {
-//             steps {
-//                 dir('i-computer-backend') {
-//                     bat 'docker build -t lakkanadulshan/mern-backend:%BUILD_NUMBER% .'
-//                 }
-//             }
-//         }
-
-//         stage('Login to Docker Hub') {
-//             steps {
-//                 withCredentials([string(credentialsId: 'test-dockerhubpassword', variable: 'docker_pass')]) {
-//                     bat '''
-//                     echo %docker_pass% | docker login -u lakkanadulshan --password-stdin
-//                     '''
-//                 }
-//             }
-//         }
-
-//         stage('Push Image') {
-//             steps {
-//                 bat 'docker push lakkanadulshan/mern-backend:%BUILD_NUMBER%'
-//             }
-//         }
-//     }
-
-//     post {
-//         always {
-//             bat 'docker logout'
-//         }
-//     }
-// }
-
 pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = "lakkanadulshan/mern-backend"
+        BACKEND_IMAGE_NAME = "lakkanadulshan/mern-backend"
+        FRONTEND_IMAGE_NAME = "lakkanadulshan/mern-frontend"
         IMAGE_TAG = "${BUILD_NUMBER}"
     }
 
@@ -91,10 +56,18 @@ pipeline {
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Build Backend Docker Image') {
             steps {
                 dir('i-computer-backend') {
-                    bat "docker build -t %IMAGE_NAME%:%IMAGE_TAG% ."
+                    bat "docker build -t %BACKEND_IMAGE_NAME%:%IMAGE_TAG% ."latest
+                }
+            }
+        }
+
+        stage('Build Frontend Docker Image') {
+            steps {
+                dir('i-computer-frontend') {
+                    bat "docker build -t %FRONTEND_IMAGE_NAME%:%IMAGE_TAG% ."
                 }
             }
         }
@@ -109,9 +82,15 @@ pipeline {
             }
         }
 
-        stage('Push Image') {
+        stage('Push Backend Image') {
             steps {
-                bat "docker push %IMAGE_NAME%:%IMAGE_TAG%"
+                bat "docker push %BACKEND_IMAGE_NAME%:%IMAGE_TAG%"
+            }
+        }
+
+        stage('Push Frontend Image') {
+            steps {
+                bat "docker push %FRONTEND_IMAGE_NAME%:%IMAGE_TAG%"
             }
         }
 
@@ -128,9 +107,20 @@ pipeline {
                       -e MONGO_URI="%MONGO_URI%" ^
                       -e JWT_SECRET="%JWT_SECRET%" ^
                       -e PORT=5000 ^
-                      %IMAGE_NAME%:%IMAGE_TAG%
+                      %BACKEND_IMAGE_NAME%:%IMAGE_TAG%
                     '''
                 }
+            }
+        }
+
+        stage('Deploy Frontend Container') {
+            steps {
+                bat '''
+                docker stop mern-frontend || echo "No container to stop"
+                docker rm mern-frontend || echo "No container to remove"
+                docker run -d --name mern-frontend -p 3000:3000 ^
+                  %FRONTEND_IMAGE_NAME%:%IMAGE_TAG%latest
+                '''
             }
         }
     }
