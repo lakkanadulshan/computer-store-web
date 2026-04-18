@@ -59,7 +59,7 @@ pipeline {
         stage('Build Backend Docker Image') {
             steps {
                 dir('i-computer-backend') {
-                    bat "docker build -t %BACKEND_IMAGE_NAME%:%IMAGE_TAG% ."latest
+                    bat "docker build -t %BACKEND_IMAGE_NAME%:%IMAGE_TAG% ."
                 }
             }
         }
