@@ -118,7 +118,7 @@ pipeline {
                 bat '''
                 docker stop mern-frontend || echo "No container to stop"
                 docker rm mern-frontend || echo "No container to remove"
-                docker run -d --name mern-frontend -p 3000:3000 ^
+                docker run -d --name mern-frontend -p 3001:3000 ^
                   %FRONTEND_IMAGE_NAME%:%IMAGE_TAG%
                 '''
             }
