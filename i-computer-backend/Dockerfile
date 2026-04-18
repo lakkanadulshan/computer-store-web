@@ -14,8 +14,8 @@ RUN npm install
 # Copy all project files into container
 COPY . .  
 
-# Tell Docker that app runs on port 3000
-EXPOSE 3000  
+# Tell Docker that app runs on port 5000
+EXPOSE 5000  
 
 # Command to start the app
 CMD ["npm", "start"]

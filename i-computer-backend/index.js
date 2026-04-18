@@ -24,6 +24,8 @@ app.use(cors());
 const mongodbURL = process.env.MONGO_URI || process.env.mongoURL;
 const port = process.env.PORT || 3000;
 
+//sample
+
 async function ensureOrderIndexes() {
     try {
         const ordersCollection = mongoose.connection.db.collection("orders");
