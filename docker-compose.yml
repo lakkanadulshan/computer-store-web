@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  backend:
+    image: lakkanadulshan/mern-backend:latest
+    container_name: mern-backend
+    ports:
+      - "5000:3000"
+    env_file:
+      - ./i-computer-backend/.env
+    restart: unless-stopped
+
+  frontend:
+    build: ./i-computer-frontend
+    container_name: mern-frontend
+    ports:
+      - "5173:5173"
+    environment:
+      VITE_backend_URL: http://localhost:5000
+    depends_on:
+      - backend
+    restart: unless-stopped
