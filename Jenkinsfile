@@ -124,9 +124,10 @@ pipeline {
                     bat '''
                     docker stop mern-backend || echo "No container to stop"
                     docker rm mern-backend || echo "No container to remove"
-                    docker run -d --name mern-backend -p 5000:3000 ^
-                      -e mongoURL="%MONGO_URI%" ^
+                    docker run -d --name mern-backend -p 5000:5000 ^
+                      -e MONGO_URI="%MONGO_URI%" ^
                       -e JWT_SECRET="%JWT_SECRET%" ^
+                      -e PORT=5000 ^
                       %IMAGE_NAME%:%IMAGE_TAG%
                     '''
                 }
